@@ -2,7 +2,7 @@ class Character extends MoveableObject {
     height = 250;
     width = 130;
     y = 190;
-    speed = 15;
+    speed = 5;
     IMAGES_IDLE = [
         'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-1.png',
         'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-2.png',
@@ -56,13 +56,16 @@ class Character extends MoveableObject {
                 this.x -= this.speed;
                 this.otherDirection = true;
             }
+            if (this.world.keyboard.UP && !this.inAir()) {
+                this.speedY = 20;
+            }
             this.world.camera_x = -this.x +100;
-        }, 1000 / 25);
+        }, 1000 / 60);
 
         setInterval(() => {
             if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 this.playAnimation(this.IMAGES_WALKING);
-            } else if (this.world.keyboard.UP) {
+            } else if (this.inAir()) {
                 this.playAnimation(this.IMAGES_JUMPING)
             } else {
                 this.playAnimation(this.IMAGES_IDLE)
@@ -72,6 +75,6 @@ class Character extends MoveableObject {
     }
 
     jump() {
-
+        
     }
 }

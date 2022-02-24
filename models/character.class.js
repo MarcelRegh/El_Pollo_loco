@@ -1,7 +1,8 @@
 class Character extends MoveableObject {
     height = 250;
     width = 130;
-    y =190;
+    y = 190;
+    speed = 15;
     /*IMAGES_IDLE = [
         'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-1.png',
         'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-2.png',
@@ -34,22 +35,23 @@ class Character extends MoveableObject {
     animate() {
 
         setInterval(() => {
-            if (this.world.keyboard.RIGHT) {
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
                 this.x += this.speed;
+                this.otherDirection = false;
             }
-            if (this.world.keyboard.LEFT) {
+            if (this.world.keyboard.LEFT && this.x > 0) {
                 this.x -= this.speed;
+                this.otherDirection = true;
             }
-        }, 1000 / 60 );
+            this.world.camera_x = -this.x +100;
+        }, 1000 / 60);
 
         setInterval(() => {
             if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                setInterval(() => {
-                    let i = this.currentImage % this.IMAGES_WALKING.length;
-                    let path = this.IMAGES_WALKING[i];
-                    this.img = this.imageCache[path];
-                    this.currentImage++;
-                }, 100);
+                let i = this.currentImage % this.IMAGES_WALKING.length;
+                let path = this.IMAGES_WALKING[i];
+                this.img = this.imageCache[path];
+                this.currentImage++;
             } //else {
             //     let i = this.currentImage % this.IMAGES_IDLE.length;
             //     let path = this.IMAGES_IDLE[i];

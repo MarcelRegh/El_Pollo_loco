@@ -5,6 +5,10 @@ class MoveableObject extends DrawableObject {
     acceleration = 1;
     energy = 100;
     lastHit = 0;
+    collectedBottles = 0;
+    lastCollectedBottle = 0;
+    collectedCoins = 0;
+    lastCollectedCoin = 0;
 
     playAnimation(images) {
         let i = this.currentImage % images.length;
@@ -36,8 +40,7 @@ class MoveableObject extends DrawableObject {
     }
 
     inAir() {
-        return this.y < 190;
-    }
+        return this.y < 190;   }
 
     isColliding(mo) {
         return this.x + this.width > mo.x &&
@@ -53,6 +56,24 @@ class MoveableObject extends DrawableObject {
             this.energy = 0;
         } else {
             this.lastHit = new Date().getTime();
+        }
+    }
+
+    bottleCollected() {
+        this.collectedBottles += 1;
+        if (this.collectedBottles > 5) {
+            this.collectedBottles = 5;
+        } else {
+            this.lastCollectedBottle = new Date().getTime();
+        }
+    }
+
+    coinCollected() {
+        this.collectedCoins += 1;
+        if (this.collectedCoins > 5) {
+            this.collectedCoins = 5;
+        } else {
+            this.lastCollectedCoin = new Date().getTime();
         }
     }
 

@@ -17,6 +17,9 @@ class World {
         this.draw();
         this.setWorld();
         this.checkCollision();
+        this.checkCollisionEnemy();
+        this.checkCollisionBottles();
+        this.checkCollisionCoins();
     }
 
     setWorld() {
@@ -25,25 +28,57 @@ class World {
 
     checkCollision() {
         setInterval(() => {
-            this.level.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy)) {
-                    this.character.hit();
-                    this.statusBarLife.setPercentage(this.character.energy);
-                    console.log('Collision with character', this.character.energy);
-                }
-            })
+            this.checkCollisionEnemy();
+            this.checkCollisionBottles();
+            this.checkCollisionCoins();
         }, 200)
+    }
+
+    checkCollisionEnemy() {
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy)) {
+                this.character.hit();
+                this.statusBarLife.setPercentage(this.character.energy);
+                console.log('Collision with character', this.character.energy);
+            }
+        })
+    }
+
+    checkCollisionBottles() {
+
+        this.level.bottles.forEach((bottles) => {
+            if (this.character.isColliding(bottles)) {
+                this.character.bottleCollected();
+                this.statusBarBottle.setPercentage(this.character.collectedBottles);
+                console.log('Collision with Bottle', this.character.collectedBottles);
+            }
+        })
+
+    }
+
+    checkCollisionCoins() {
+
+        this.level.coins.forEach((coins) => {
+            if (this.character.isColliding(coins)) {
+                this.character.coinCollected();
+                this.statusBarCoin.setPercentage(this.character.collectedCoins);
+                console.log('Collision with Coin', this.character.collectedCoins);
+            }
+        })
+
     }
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
+
         this.ctx.translate(this.camera_x, 0);
 
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.bottles);
         this.addToMap(this.statusBarBoss);
 
         this.ctx.translate(-this.camera_x, 0);
@@ -55,7 +90,7 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
 
         let self = this;
-        requestAnimationFrame(function() {
+        requestAnimationFrame(function () {
             self.draw();
         });
     }
@@ -69,7 +104,7 @@ class World {
     addToMap(mo) {
         if (mo.otherDirection) {
             this.mirrorImg(mo);
-        } 
+        }
         mo.draw(this.ctx);
         mo.drawHitBox(this.ctx);
         if (mo.otherDirection) {

@@ -5,7 +5,7 @@ class StatusBarBottle extends DrawableObject {
         'img/7.Marcadores/Barra/Marcador_botella/azul/20_.png',
         'img/7.Marcadores/Barra/Marcador_botella/azul/40_.png',
         'img/7.Marcadores/Barra/Marcador_botella/azul/60_.png',
-        'img/7.Marcadores/Barra/Marcador_botella/azul/80_.png',
+        'img/7.Marcadores/Barra/Marcador_botella/Azul/80_.png',
         'img/7.Marcadores/Barra/Marcador_botella/azul/100_.png',
     ];
     percentage = 0;
@@ -17,7 +17,7 @@ class StatusBarBottle extends DrawableObject {
         this.y = 100;
         this.width = 200;
         this.height = 60;
-        this.setPercentage();
+        this.setPercentage(0);
     }
 
     setPercentage(percentage) {
@@ -27,15 +27,15 @@ class StatusBarBottle extends DrawableObject {
     }
 
     resolveImgIndex() {
-        if (this.percentage == 100) {
+        if (this.percentage == 5) {
             return 5;
-        } else if (this.percentage > 80) {
+        } else if (this.percentage > 3) {
             return 4;
-        } else if (this.percentage > 60) {
+        } else if (this.percentage > 2) {
             return 3;
-        } else if (this.percentage > 40) {
+        } else if (this.percentage > 1) {
             return 2;
-        } else if (this.percentage > 20) {
+        } else if (this.percentage > 0) {
             return 1;
         } else {
             return 0;

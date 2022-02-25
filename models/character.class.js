@@ -2,7 +2,7 @@ class Character extends MoveableObject {
     height = 250;
     width = 130;
     y = 190;
-    speed = 5;
+    speed = 50;
     IMAGES_IDLE = [
         'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-1.png',
         'img/2.Secuencias_Personaje-Pepe-corrección/1.IDLE/IDLE/I-2.png',

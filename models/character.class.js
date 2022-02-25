@@ -34,6 +34,20 @@ class Character extends MoveableObject {
         'img/2.Secuencias_Personaje-Pepe-corrección/3.Secuencia_salto/J-38.png',
         'img/2.Secuencias_Personaje-Pepe-corrección/3.Secuencia_salto/J-39.png'
     ];
+    IMAGES_HURT = [
+        'img/2.Secuencias_Personaje-Pepe-corrección/4.Herido/H-41.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/4.Herido/H-42.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/4.Herido/H-43.png'
+    ];
+    IMAGES_DEAD = [
+        'img/2.Secuencias_Personaje-Pepe-corrección/5.Muerte/D-51.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/5.Muerte/D-52.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/5.Muerte/D-53.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/5.Muerte/D-54.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/5.Muerte/D-55.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/5.Muerte/D-56.png',
+        'img/2.Secuencias_Personaje-Pepe-corrección/5.Muerte/D-57.png'
+    ];
     world;
 
     constructor() {
@@ -41,6 +55,8 @@ class Character extends MoveableObject {
         this.loadImgs(this.IMAGES_IDLE);
         this.loadImgs(this.IMAGES_WALKING);
         this.loadImgs(this.IMAGES_JUMPING);
+        this.loadImgs(this.IMAGES_HURT);
+        this.loadImgs(this.IMAGES_DEAD);
         this.applyGravity();
         this.animate();
     }
@@ -49,21 +65,24 @@ class Character extends MoveableObject {
 
         setInterval(() => {
             if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
-                this.x += this.speed;
-                this.otherDirection = false;
+                this.moveRight();
             }
             if (this.world.keyboard.LEFT && this.x > 0) {
-                this.x -= this.speed;
+                this.moveLeft();
                 this.otherDirection = true;
             }
             if (this.world.keyboard.UP && !this.inAir()) {
-                this.speedY = 20;
+                this.jump();
             }
-            this.world.camera_x = -this.x +100;
+            this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
 
         setInterval(() => {
-            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+            if (this.isHurt()) {
+                this.playAnimation(this.IMAGES_HURT);
+            } else if (this.isDead()) {
+                this.playAnimation(this.IMAGES_DEAD);
+            } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 this.playAnimation(this.IMAGES_WALKING);
             } else if (this.inAir()) {
                 this.playAnimation(this.IMAGES_JUMPING)
@@ -74,7 +93,4 @@ class Character extends MoveableObject {
         }, 100);
     }
 
-    jump() {
-        
-    }
 }

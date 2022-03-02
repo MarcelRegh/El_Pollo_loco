@@ -9,6 +9,7 @@ class World {
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
     statusBarBoss = new StatusBarBoss();
+    throwableBottles = [];
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -17,9 +18,6 @@ class World {
         this.draw();
         this.setWorld();
         this.checkCollision();
-        this.checkCollisionEnemy();
-        this.checkCollisionBottles();
-        this.checkCollisionCoins();
     }
 
     setWorld() {
@@ -31,6 +29,7 @@ class World {
             this.checkCollisionEnemy();
             this.checkCollisionBottles();
             this.checkCollisionCoins();
+            this.checkThrowObject();
         }, 200)
     }
 
@@ -45,7 +44,6 @@ class World {
     }
 
     checkCollisionBottles() {
-
         this.level.bottles.forEach((bottles) => {
             if (this.character.isColliding(bottles)) {
                 this.character.bottleCollected();
@@ -53,11 +51,9 @@ class World {
                 console.log('Collision with Bottle', this.character.collectedBottles);
             }
         })
-
     }
 
     checkCollisionCoins() {
-
         this.level.coins.forEach((coins) => {
             if (this.character.isColliding(coins)) {
                 this.character.coinCollected();
@@ -65,7 +61,15 @@ class World {
                 console.log('Collision with Coin', this.character.collectedCoins);
             }
         })
+    }
 
+    checkThrowObject() {
+        if(this.keyboard.SPACE && this.character.collectedBottles >= 1) { // if SPACE is pressed and collectedBottles are more than 1 you can throw 1
+            this.character.collectedBottles -= 1; // delet 1 Bottle from the collectedBottles var 
+            let bottle = new ThrowableObject(this.character.x + 25, this.character.y + 50); // A var to add a Bottle to the map
+            this.throwableBottles.push(bottle); // push a New Object / Bottle to the Array
+            this.statusBarBottle.setPercentage(this.character.collectedBottles); // Refreshs the Statusbar
+        }
     }
 
     draw() {
@@ -79,6 +83,7 @@ class World {
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.bottles);
+        this.addObjectsToMap(this.throwableBottles);
         this.addToMap(this.statusBarBoss);
 
         this.ctx.translate(-this.camera_x, 0);
@@ -110,7 +115,6 @@ class World {
         if (mo.otherDirection) {
             this.backMirrorImg(mo)
         }
-
     }
 
     mirrorImg(mo) {

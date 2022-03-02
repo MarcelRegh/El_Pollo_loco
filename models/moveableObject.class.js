@@ -40,14 +40,18 @@ class MoveableObject extends DrawableObject {
     }
 
     inAir() {
-        return this.y < 190;   }
+        if (this instanceof ThrowableObject) {
+            return true;
+        }  else {
+            return this.y < 190; 
+        }
+    }
 
     isColliding(mo) {
         return this.x + this.width > mo.x &&
-            this.y + this.height > mo.y &&
-            this.x < mo.x &&
-            this.y < mo.y + mo.height
-
+        this.y + this.height > mo.y &&
+        this.x < mo.x &&
+        this.y < mo.y + mo.height;
     }
 
     hit() {

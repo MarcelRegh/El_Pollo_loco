@@ -58,8 +58,7 @@ class World {
                         enemy.hit();
                         this.statusBarBoss.setPercentage(enemy.energy);
                     }
-                }
-                else {
+                } else {
                     setTimeout(() =>{
                         this.youWon();
                     }, 500)
@@ -159,7 +158,7 @@ class World {
             this.mirrorImg(mo);
         }
         mo.draw(this.ctx);
-        mo.drawHitBox(this.ctx);
+        // mo.drawHitBox(this.ctx);
         if (mo.otherDirection) {
             this.backMirrorImg(mo)
         }

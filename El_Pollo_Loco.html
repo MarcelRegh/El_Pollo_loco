@@ -32,10 +32,26 @@
 </head>
 
 <body onload="init()">
-
-    <h1>El Pollo Loco</h1>
-    <canvas id="canvas" width="720" height="480"></canvas>
-
+    <img src="img/game/desert.jpg" alt="backgroung" class="bg-img">
+    
+    <div class="content">
+        <div class="header">
+            <h1>El Pollo Loco</h1>
+        </div>
+        <div id="canvasBox">
+            <canvas id="canvas" width="720" height="480"></canvas>
+            <img id="startScreen" src="img/9.Intro _ Outro Image/Start Screen/Opción 1.png">
+            <img id="endScreen" src="img/9.Intro _ Outro Image/_Game over_ screen/3.Game over.png" class="d-none">
+            <img id="world-end" src="img/5.Fondo/1.png" class="d-none">
+            <img id="youLost" src="img/9.Intro _ Outro Image/_Game over_ screen/1.you lost.png" class="d-none">
+            <img id="youWon" src="img/9.Intro _ Outro Image/_Game over_ screen/3.Game over.png" class="d-none">
+            <button onclick="startGame()" id="start-game-btn" class="btn">Start Game</button>
+            <button onclick="restartGame()" id="restart-game-btn" class="btn d-none">Restart Game</button>
+        </div>
+        <div id="infobox">
+            <h4>Help Pepe to defeat the big chicken by hitting it with tabasco bottles!</h4>
+        </div>
+    </div>
 </body>
 
 </html>

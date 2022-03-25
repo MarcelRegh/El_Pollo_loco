@@ -4,10 +4,17 @@ let keyboard = new Keyboard();
 
 function init() {
     canvas = document.getElementById('canvas');
+}
+
+function startGame() {
     world = new World(canvas, keyboard);
+    document.getElementById('start-game-btn').classList.add('d-none');
+    document.getElementById('startScreen').classList.add('d-none');
+    document.getElementById('infobox').innerHTML = `<h5> Use the Arrow Keys to move and Jump with space you can Throw bottles to kill the endboss </h5>`;
+}
 
-
-    console.log(world.character);
+function restartGame() {
+    location.reload();
 }
 
 window.addEventListener("keydown", (e) => {

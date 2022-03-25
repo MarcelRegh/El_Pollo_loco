@@ -10,6 +10,7 @@ class World {
     statusBarBottle = new StatusBarBottle();
     statusBarBoss = new StatusBarBoss();
     throwableBottles = [];
+    gameOver = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -27,40 +28,63 @@ class World {
     checkCollision() {
         setInterval(() => {
             this.checkCollisionEnemy();
-            this.checkCollisionBottles();
-            this.checkCollisionCoins();
+            this.checkCollisionsWihtCollectibles(this.level.coins);
+            this.checkCollisionsWihtCollectibles(this.level.bottles);
             this.checkThrowObject();
+            this.checkCollisionThrowableObject();
         }, 200)
     }
 
     checkCollisionEnemy() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy)) {
-                this.character.hit();
-                this.statusBarLife.setPercentage(this.character.energy);
-                console.log('Collision with character', this.character.energy);
+            if (!this.character.energy == 0) {
+                if (this.character.isColliding(enemy)) {
+                    this.character.hit();
+                    this.statusBarLife.setPercentage(this.character.energy);
+                }
+            } else {
+                setTimeout(() =>{
+                    this.youLost();
+                }, 500)
             }
+        });
+    }
+
+    checkCollisionThrowableObject() {
+        this.throwableBottles.forEach( throwableBottles => {
+            this.level.enemies.forEach( enemy => {
+                if (!enemy.energy == 0) {
+                    if(throwableBottles.isColliding(enemy)) {
+                        enemy.hit();
+                        this.statusBarBoss.setPercentage(enemy.energy);
+                    }
+                }
+                else {
+                    setTimeout(() =>{
+                        this.youWon();
+                    }, 500)
+                }
+            })
         })
     }
 
-    checkCollisionBottles() {
-        this.level.bottles.forEach((bottles) => {
-            if (this.character.isColliding(bottles)) {
-                this.character.bottleCollected();
-                this.statusBarBottle.setPercentage(this.character.collectedBottles);
-                console.log('Collision with Bottle', this.character.collectedBottles);
+    checkCollisionsWihtCollectibles(array){
+        array.forEach((element, index)=>{
+            if(this.character.isColliding(element)){
+                this.updateStatusBar(array);
+               array.splice(index, 1);
             }
-        })
+        });
     }
 
-    checkCollisionCoins() {
-        this.level.coins.forEach((coins) => {
-            if (this.character.isColliding(coins)) {
-                this.character.coinCollected();
-                this.statusBarCoin.setPercentage(this.character.collectedCoins);
-                console.log('Collision with Coin', this.character.collectedCoins);
-            }
-        })
+    updateStatusBar(array) {
+        if (array == this.level.bottles) {
+            this.character.bottleCollected();
+            this.statusBarBottle.setPercentage(this.character.collectedBottles);
+        } else if (array == this.level.coins) {
+            this.character.coinCollected();
+            this.statusBarCoin.setPercentage(this.character.collectedCoins);
+        }
     }
 
     checkThrowObject() {
@@ -70,6 +94,30 @@ class World {
             this.throwableBottles.push(bottle); // push a New Object / Bottle to the Array
             this.statusBarBottle.setPercentage(this.character.collectedBottles); // Refreshs the Statusbar
         }
+    }
+
+    youWon() {
+        document.getElementById('world-end').classList.remove('d-none');
+        setTimeout(() => {
+            document.getElementById('youWon').classList.remove('d-none');
+            document.getElementById('restart-game-btn').classList.remove('d-none');
+        }, 500);
+
+        setTimeout(() => {
+            document.getElementById('infobox').innerHTML=`<h4> Congratulations, YOU WON! </h4>`;
+        }, 600);
+    }
+
+    youLost() {
+        document.getElementById('world-end').classList.remove('d-none');
+        setTimeout(() => {
+            document.getElementById('youLost').classList.remove('d-none');
+            document.getElementById('restart-game-btn').classList.remove('d-none');
+        }, 500);
+
+        setTimeout(() => {
+            document.getElementById('infobox').innerHTML=`<h4> Oh NO! You've lost! TRY AGAIN!</h4>`;
+        }, 600);
     }
 
     draw() {
